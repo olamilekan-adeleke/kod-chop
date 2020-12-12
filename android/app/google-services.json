@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "981488038620",
+    "project_id": "kod-chop",
+    "storage_bucket": "kod-chop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981488038620:android:29a05498a92c5dd9c47a19",
+        "android_client_info": {
+          "package_name": "com.example.kod_chop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981488038620-qjfukeegj8elj7qqnmh218qsto5n8tfm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3Vn9O_H22MilJrjwuVFCLx6rO_mmfbDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981488038620-qjfukeegj8elj7qqnmh218qsto5n8tfm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
