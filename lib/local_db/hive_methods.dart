@@ -44,4 +44,16 @@ class HiveMethods {
     Map data = box.values.toList()[0];
     return UserModel.fromMap(data.cast());
   }
+
+  Future<Box<Map>> getCartLocalDb() async {
+    Box<Map> box = await getOpenBox(boxName: 'cartData');
+    return box;
+  }
+
+  Future<void> saveCartDataToLocalDb({@required Map foodData}) async {
+    Box<Map> cartBox = await getUserLocalDb();
+
+    await cartBox.add(foodData);
+    debugPrint('user data saved to Local db');
+  }
 }

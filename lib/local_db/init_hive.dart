@@ -12,4 +12,13 @@ class HiveInitMethods {
     Hive.init(documentDir.path);
     await Hive.openBox('userData');
   }
+
+  Future<void> startCartDataHiveDb() async {
+    /// This method will be called at the start of the app, this will start
+    /// a local Database this will host/store the user Cart Data.
+
+    Directory documentDir = await getApplicationSupportDirectory();
+    Hive.init(documentDir.path);
+    await Hive.openBox('cartData');
+  }
 }

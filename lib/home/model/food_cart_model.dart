@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kod_chop/home/model/food_model.dart';
 
-enum FoodTypeEnum { CookedFood, Snacks, Drinks, All }
-
-class FoodItemModel {
+class CartFoodItemModel {
   String foodName;
   int price;
+  int numberOfPlate;
   String description;
   double rating;
   FoodTypeEnum foodType;
@@ -12,14 +12,15 @@ class FoodItemModel {
   List searchKeys;
   List extras;
 
-  FoodItemModel({
+  CartFoodItemModel({
     @required this.foodName,
     @required this.price,
+    @required this.numberOfPlate,
     @required this.description,
     @required this.rating,
     @required this.foodType,
     @required this.imageUrl,
-    this.searchKeys,
+    @required this.searchKeys,
     this.extras,
   });
 
@@ -35,25 +36,20 @@ class FoodItemModel {
       _foodType = 'drinks';
     }
 
-    List _searchList = [];
-
-    this.foodName.split(' ').toList().forEach((element) {
-      _searchList.add(element.toLowerCase());
-    });
-
     return {
       'foodName': this.foodName,
       'price': this.price,
+      'numberOfPlate': this.numberOfPlate,
       'description': this.description,
       'rating': this.rating,
       'foodType': _foodType,
       'imageUrl': this.imageUrl,
-      'searchKeys': _searchList,
+      'searchKeys': this.searchKeys,
       'extras': this.extras,
     };
   }
 
-  factory FoodItemModel.fromMap(Map<String, dynamic> map) {
+  factory CartFoodItemModel.fromMap(Map<String, dynamic> map) {
     FoodTypeEnum _foodType;
 
     if (map['foodType'] == 'cookedFood') {
@@ -65,9 +61,10 @@ class FoodItemModel {
       _foodType = FoodTypeEnum.Drinks;
     }
 
-    return new FoodItemModel(
+    return new CartFoodItemModel(
       foodName: map['foodName'] as String,
       price: map['price'] as int,
+      numberOfPlate: map['numberOfPlate'] as int,
       description: map['description'] as String,
       rating: map['rating'] as double,
       foodType: _foodType,

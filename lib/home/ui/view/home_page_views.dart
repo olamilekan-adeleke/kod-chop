@@ -9,6 +9,7 @@ import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/bloc/food_item/food_item_bloc.dart';
 import 'package:kod_chop/home/model/food_model.dart';
 import 'package:kod_chop/home/ui/pages/search_page.dart';
+import 'package:kod_chop/home/ui/pages/seleted_food_page.dart';
 import 'package:kod_chop/local_db/hive_methods.dart';
 
 class HomePageHeader extends StatelessWidget {
@@ -109,26 +110,27 @@ class HomePageSearchBar extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10.0),
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-        height: size.height * 0.06,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          border: Border.all(color: Colors.grey[300]),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.search, size: 22),
-            SizedBox(width: 20.0),
-            Text(
-              'Search',
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 18,
-                color: Colors.grey[400],
-              ),
+        child: Card(
+          elevation: 2.5,
+          color: Colors.grey[100],
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+            height: size.height * 0.06,
+            child: Row(
+              children: [
+                Icon(Icons.search, size: 22),
+                SizedBox(width: 20.0),
+                Text(
+                  'Search',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    color: Colors.grey[400],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -161,16 +163,10 @@ class HomePageOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10.0),
-      height: size.height * 0.12,
+      margin: EdgeInsets.symmetric(horizontal: 5.0),
+      height: size.height * 0.05,
       width: size.width,
-      child: Column(
-        children: [
-          heading(),
-          SizedBox(height: 5.0),
-          itemOptions(context),
-        ],
-      ),
+      child: itemOptions(context),
     );
   }
 
@@ -190,60 +186,39 @@ class HomePageOptions extends StatelessWidget {
     );
   }
 
-  Widget heading() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Let\'s eat',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey[700],
-          ),
-        ),
-        Text(
-          'See All',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget item(BuildContext context, String title) {
     return StreamBuilder<String>(
-        stream: selectedStream.stream,
-        builder: (context, snapshot) {
-          bool isSelected = snapshot.data == title;
+      stream: selectedStream.stream,
+      builder: (context, snapshot) {
+        bool isSelected = snapshot.data == title;
 
-          return InkWell(
-            onTap: () => update(context, title),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10.0),
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey[200],
-                border: Border.all(color: Colors.grey[300]),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Center(
-                child: Text(
-                  '$title',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: isSelected ? Colors.white : Colors.grey[400],
-                    fontSize: 20,
+        return InkWell(
+          onTap: () => update(context, title),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Card(
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey[200],
+              elevation: 2.5,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Center(
+                  child: Text(
+                    '$title',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: isSelected ? Colors.white : Colors.grey[400],
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -272,7 +247,6 @@ class HomePageFoodItemView extends StatelessWidget {
         } else if (state is ErrorFoodItemState) {
           return Center(child: Text(state.message));
         } else if (state is LoadedFoodItemState) {
-          print(state.foodList);
           return gridView(context, state.foodList);
         }
 
@@ -301,7 +275,9 @@ class HomePageFoodItemView extends StatelessWidget {
       elevation: 1.5,
       child: InkWell(
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => SearchPage()),
+          MaterialPageRoute(
+            builder: (context) => SelectedFoodPage(foodItem: foodItem),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

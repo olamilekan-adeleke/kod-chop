@@ -13,6 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await HiveInitMethods().startUserDataHiveDb();
+  await HiveInitMethods().startCartDataHiveDb();
 
   runApp(MyApp());
 }
@@ -21,18 +22,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<LoginUserModel>.value(
-        value: AuthMethods().userStream,
-        child: MultiBlocProvider(
-          providers: blocList(context),
-          child: MaterialApp(
-            theme: ThemeData(
-              backgroundColor: Color.fromRGBO(252, 252, 252, 1.0),
-              accentColor: Color.fromRGBO(144, 138, 224, 1.0),
-              primaryColor: Color.fromRGBO(250, 201, 0, 1.0),
-            ),
-            home: Wrapper(),
+      value: AuthMethods().userStream,
+      child: MultiBlocProvider(
+        providers: blocList(context),
+        child: MaterialApp(
+          theme: ThemeData(
+            backgroundColor: Color.fromRGBO(252, 252, 252, 1.0),
+            accentColor: Color.fromRGBO(144, 138, 224, 1.0),
+            primaryColor: Color.fromRGBO(250, 201, 0, 1.0),
           ),
+          home: Wrapper(),
         ),
+      ),
     );
   }
 }
