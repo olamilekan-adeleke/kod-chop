@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/model/food_cart_model.dart';
 import 'package:kod_chop/home/model/food_model.dart';
@@ -67,8 +68,9 @@ class SelectedFoodImage extends StatelessWidget {
 class SelectedFoodDetails extends StatelessWidget {
   final Size size;
   final FoodItemModel foodItem;
+  final Box cartBox;
 
-  SelectedFoodDetails({Key key, this.size, this.foodItem}) : super(key: key);
+  SelectedFoodDetails({Key key, this.size, this.foodItem, this.cartBox}) : super(key: key);
   final ValueNotifier<int> priceValue = ValueNotifier<int>(0);
   final ValueNotifier<int> numberOfPlateValue = ValueNotifier<int>(1);
 
@@ -125,7 +127,7 @@ class SelectedFoodDetails extends StatelessWidget {
           searchKeys: foodItem.searchKeys,
         );
 
-        await HiveMethods().saveCartDataToLocalDb(foodData: cartItem.toMap());
+        await cartBox.add(cartItem.toMap());
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text('Addde To Cart'),
           backgroundColor: Colors.green,

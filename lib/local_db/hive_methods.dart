@@ -51,9 +51,11 @@ class HiveMethods {
   }
 
   Future<void> saveCartDataToLocalDb({@required Map foodData}) async {
-    Box<Map> cartBox = await getUserLocalDb();
+    Box<Map> cartBox = Hive.box('cartData');
 
     await cartBox.add(foodData);
+    print(cartBox.values);
+    print(cartBox.length);
     debugPrint('user data saved to Local db');
   }
 }

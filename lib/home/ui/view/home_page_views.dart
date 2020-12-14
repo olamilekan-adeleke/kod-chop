@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kod_chop/auth/model/user_model.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/bloc/food_item/food_item_bloc.dart';
@@ -109,6 +111,7 @@ class HomePageSearchBar extends StatelessWidget {
         );
       },
       child: Container(
+        width: size.width * 0.80,
         margin: EdgeInsets.symmetric(horizontal: 10.0),
         child: Card(
           elevation: 2.5,
@@ -224,8 +227,10 @@ class HomePageOptions extends StatelessWidget {
 
 class HomePageFoodItemView extends StatelessWidget {
   final Size size;
+  final Box cartBox;
 
-  const HomePageFoodItemView({Key key, this.size}) : super(key: key);
+  const HomePageFoodItemView({Key key, this.size, this.cartBox})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +281,10 @@ class HomePageFoodItemView extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => SelectedFoodPage(foodItem: foodItem),
+            builder: (context) => SelectedFoodPage(
+              foodItem: foodItem,
+              cartBox: cartBox,
+            ),
           ),
         ),
         child: Column(
@@ -332,6 +340,60 @@ class HomePageFoodItemView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class HomeCartIcon extends StatelessWidget {
+  final Size size;
+  final Box cartBox;
+
+  HomeCartIcon({Key key, this.size, this.cartBox}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.width * 0.12,
+      height: size.height * 0.05,
+      child: cartIcon(),
+    );
+  }
+
+  Widget cartIcon() {
+    return ValueListenableBuilder(
+      valueListenable: cartBox.listenable(),
+      builder: (_, Box value, child) {
+        int count = value.length;
+        return Stack(
+          children: [
+            Icon(
+              Icons.shopping_cart,
+              size: 40,
+              color: Colors.grey,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: EdgeInsets.all(2.0),
+                width: size.width * 0.05,
+                height: size.height * 0.03,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '$count',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
