@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:kod_chop/bloc_list.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,8 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await HiveInitMethods().startUserDataHiveDb();
   await HiveInitMethods().startCartDataHiveDb();
+  await HiveInitMethods().startAddressDataHiveDb();
+  await Hive.openBox('cartData');
 
   runApp(MyApp());
 }

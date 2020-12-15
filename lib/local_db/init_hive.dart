@@ -11,6 +11,7 @@ class HiveInitMethods {
     Directory documentDir = await getApplicationSupportDirectory();
     Hive.init(documentDir.path);
     await Hive.openBox('userData');
+    print('ope userDat');
   }
 
   Future<void> startCartDataHiveDb() async {
@@ -19,6 +20,18 @@ class HiveInitMethods {
 
     Directory documentDir = await getApplicationSupportDirectory();
     Hive.init(documentDir.path);
-    await Hive.openBox('cartData');
+    var x = await Hive.openBox('cartData');
+    print('ope cart');
+    print(x.values);
+  }
+
+  Future<void> startAddressDataHiveDb() async {
+    /// This method will be called at the start of the app, this will start
+    /// a local Database this will host/store the user address Data.
+
+    Directory documentDir = await getApplicationSupportDirectory();
+    Hive.init(documentDir.path);
+    await Hive.openBox('addressData');
+    print('ope address');
   }
 }

@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   Widget homeBodyUiList() {
     size = MediaQuery.of(context).size;
     cartBox = Hive.box('cartData');
+//    cartBox = await HiveMethods().getOpenBox(boxName: 'cartData');
 
     return Container(
       height: size.height,

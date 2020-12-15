@@ -231,8 +231,10 @@ class CartTotalAmountUi extends StatelessWidget {
   int getTotal(Box data) {
     int _total = 0;
 
-    List<CartFoodItemModel> cartList =
-        data.values.map((e) => CartFoodItemModel.fromMap(e)).toList();
+    List<CartFoodItemModel> cartList = data.values.map((e) {
+      Map data = e;
+      return CartFoodItemModel.fromMap(data.cast());
+    }).toList();
 
     cartList.forEach((element) {
       int currentFee = element.price * element.numberOfPlate;
