@@ -29,14 +29,9 @@ class _HomePageState extends State<HomePage> {
       height: size.height,
       child: Column(
         children: [
-          HomePageHeader(size: size),
+          HomePageHeader(size: size, cartBox: cartBox),
           SizedBox(height: 15.0),
-          Row(
-            children: [
-              HomePageSearchBar(size: size),
-              HomeCartIcon(size: size, cartBox: cartBox),
-            ],
-          ),
+          HomePageSearchBar(size: size),
           SizedBox(height: 15.0),
           HomePageOptions(size: size),
           SizedBox(height: 5.0),

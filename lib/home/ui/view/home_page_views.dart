@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kod_chop/auth/methods/auth_methods.dart';
 import 'package:kod_chop/auth/model/user_model.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/bloc/food_item/food_item_bloc.dart';
 import 'package:kod_chop/home/model/food_model.dart';
+import 'package:kod_chop/home/ui/pages/cart_page.dart';
 import 'package:kod_chop/home/ui/pages/search_page.dart';
 import 'package:kod_chop/home/ui/pages/seleted_food_page.dart';
 import 'package:kod_chop/local_db/hive_methods.dart';
 
 class HomePageHeader extends StatelessWidget {
   final Size size;
+  final Box cartBox;
 
-  const HomePageHeader({Key key, this.size}) : super(key: key);
+  const HomePageHeader({Key key, this.size, this.cartBox}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +35,22 @@ class HomePageHeader extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       height: size.height * 0.09,
       width: size.width,
-      child: FutureBuilder<UserModel>(
-          future: HiveMethods().getUserDataInModel(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            }
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FutureBuilder<UserModel>(
+            future: HiveMethods().getUserDataInModel(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-            return userDetails(snapshot.data);
-          }),
+              return userDetails(snapshot.data);
+            },
+          ),
+          HomeCartIcon(size: size, cartBox: cartBox),
+        ],
+      ),
     );
   }
 
@@ -48,8 +58,8 @@ class HomePageHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        userName(userData.fullName),
         userImage('https://ksksksks'),
+        userName(userData.fullName),
       ],
     );
   }
@@ -57,6 +67,7 @@ class HomePageHeader extends StatelessWidget {
   Widget userName(String name) {
     return Container(
       height: size.height * 0.07,
+      margin: EdgeInsets.only(left: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -83,14 +94,19 @@ class HomePageHeader extends StatelessWidget {
   }
 
   Widget userImage(String url) {
-    return Container(
-      height: size.height * 0.07,
-      width: size.width * 0.1,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey[300],
+    return InkWell(
+      onTap: () async {
+        await AuthMethods().signOut();
+      },
+      child: Container(
+        height: size.height * 0.07,
+        width: size.width * 0.1,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey[300],
+        ),
+        child: Icon(Icons.person),
       ),
-      child: Icon(Icons.person),
     );
   }
 }
@@ -103,7 +119,7 @@ class HomePageSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => SearchPage(),
@@ -111,7 +127,7 @@ class HomePageSearchBar extends StatelessWidget {
         );
       },
       child: Container(
-        width: size.width * 0.80,
+        width: size.width,
         margin: EdgeInsets.symmetric(horizontal: 10.0),
         child: Card(
           elevation: 2.5,
@@ -352,33 +368,41 @@ class HomeCartIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size.width * 0.12,
-      height: size.height * 0.05,
-      child: cartIcon(),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => CartPage(cartBox: cartBox)),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        width: size.width * 0.10,
+        height: size.height * 0.05,
+        child: cartIcon(),
+      ),
     );
   }
 
   Widget cartIcon() {
     return ValueListenableBuilder(
       valueListenable: cartBox.listenable(),
-      builder: (_, Box value, child) {
+      builder: (context, Box value, child) {
         int count = value.length;
         return Stack(
           children: [
             Icon(
               Icons.shopping_cart,
-              size: 40,
-              color: Colors.grey,
+              size: 38,
+              color: Colors.black,
             ),
             Align(
               alignment: Alignment.topRight,
               child: Container(
-                padding: EdgeInsets.all(2.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                 width: size.width * 0.05,
                 height: size.height * 0.03,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
                 ),
                 child: Center(

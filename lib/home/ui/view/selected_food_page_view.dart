@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/model/food_cart_model.dart';
 import 'package:kod_chop/home/model/food_model.dart';
-import 'package:kod_chop/local_db/hive_methods.dart';
 
 class SelectedFoodImage extends StatelessWidget {
   final Size size;
@@ -70,7 +69,8 @@ class SelectedFoodDetails extends StatelessWidget {
   final FoodItemModel foodItem;
   final Box cartBox;
 
-  SelectedFoodDetails({Key key, this.size, this.foodItem, this.cartBox}) : super(key: key);
+  SelectedFoodDetails({Key key, this.size, this.foodItem, this.cartBox})
+      : super(key: key);
   final ValueNotifier<int> priceValue = ValueNotifier<int>(0);
   final ValueNotifier<int> numberOfPlateValue = ValueNotifier<int>(1);
 
@@ -118,7 +118,7 @@ class SelectedFoodDetails extends StatelessWidget {
       onTap: () async {
         CartFoodItemModel cartItem = CartFoodItemModel(
           foodName: foodItem.foodName,
-          price: priceValue.value,
+          price: foodItem.price,
           numberOfPlate: numberOfPlateValue.value,
           description: foodItem.description,
           rating: foodItem.rating,
@@ -265,14 +265,13 @@ class SelectedFoodDetails extends StatelessWidget {
             height: size.height * 0.06,
             width: size.width * 0.08,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]),
               shape: BoxShape.circle,
-              color: Colors.grey[200],
+              color: Theme.of(context).accentColor,
             ),
             child: Center(
               child: Icon(
                 Icons.remove,
-                color: Theme.of(context).primaryColor,
+                color: Colors.white,
               ),
             ),
           ),
@@ -303,14 +302,13 @@ class SelectedFoodDetails extends StatelessWidget {
             height: size.height * 0.06,
             width: size.width * 0.08,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]),
               shape: BoxShape.circle,
-              color: Colors.grey[200],
+              color: Theme.of(context).accentColor,
             ),
             child: Center(
               child: Icon(
                 Icons.add,
-                color: Theme.of(context).primaryColor,
+                color: Colors.white,
               ),
             ),
           ),
