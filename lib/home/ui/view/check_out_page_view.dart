@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/model/address_model.dart';
+import 'package:kod_chop/home/repo/fund_repo.dart';
 
 class CheckOutAddressUi extends StatelessWidget {
   final Size size;
@@ -267,7 +268,7 @@ class CheckOutPaymentUi extends StatelessWidget {
 
   const CheckOutPaymentUi({Key key, this.amount, this.size}) : super(key: key);
 
-  void makePayment(BuildContext context) {
+  Future<void> makePayment(BuildContext context) async {
     Box addressBox = Hive.box('addressData');
 
     List<AddressModel> listOfAddress = [];
@@ -285,8 +286,18 @@ class CheckOutPaymentUi extends StatelessWidget {
       AddressModel selectedAddress = listOfAddress[0];
 
       print(selectedAddress);
+      print(selectedAddress.toMap());
 
-      //TODO: make payment
+      await FundWallet().chargeCard(
+        address: selectedAddress.toMap(),
+        context: context,
+        price: amount,
+      );
+
+      await addressBox.clear();
+      await Hive.box('cartData').clear();
+      Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Select Address')));
