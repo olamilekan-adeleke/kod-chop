@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kod_chop/home/model/food_model.dart';
+import 'package:kod_chop/local_db/hive_methods.dart';
 
 class FoodRepo {
   CollectionReference foodRef =
       FirebaseFirestore.instance.collection('foodItems');
+  CollectionReference orderRef =
+      FirebaseFirestore.instance.collection('orders');
 
   Future<List<FoodItemModel>> getFood(FoodTypeEnum foodType) async {
     List<FoodItemModel> foodList = [];
@@ -32,5 +35,13 @@ class FoodRepo {
     }
 
     return foodList;
+  }
+
+  Stream<QuerySnapshot> orderStream() async* {
+    String userUid = await HiveMethods().getUserUid();
+    yield* orderRef
+        .where('userId', isEqualTo: userUid)
+        .orderBy('timestamp')
+        .snapshots();
   }
 }

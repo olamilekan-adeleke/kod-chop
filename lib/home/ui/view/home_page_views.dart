@@ -12,6 +12,7 @@ import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/bloc/food_item/food_item_bloc.dart';
 import 'package:kod_chop/home/model/food_model.dart';
 import 'package:kod_chop/home/ui/pages/cart_page.dart';
+import 'package:kod_chop/home/ui/pages/orders_page.dart';
 import 'package:kod_chop/home/ui/pages/search_page.dart';
 import 'package:kod_chop/home/ui/pages/seleted_food_page.dart';
 import 'package:kod_chop/local_db/hive_methods.dart';
@@ -48,7 +49,9 @@ class HomePageHeader extends StatelessWidget {
               return userDetails(snapshot.data);
             },
           ),
+          Spacer(),
           HomeCartIcon(size: size, cartBox: cartBox),
+          HomeOrderIcon(size: size),
         ],
       ),
     );
@@ -392,8 +395,8 @@ class HomeCartIcon extends StatelessWidget {
           children: [
             Icon(
               Icons.shopping_cart,
-              size: 38,
-              color: Colors.black,
+              size: 35,
+              color: Colors.white,
             ),
             Align(
               alignment: Alignment.topRight,
@@ -418,6 +421,37 @@ class HomeCartIcon extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class HomeOrderIcon extends StatelessWidget {
+  final Size size;
+
+  HomeOrderIcon({Key key, this.size}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => OrdersPage()),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        width: size.width * 0.10,
+        height: size.height * 0.05,
+        child: cartIcon(),
+      ),
+    );
+  }
+
+  Widget cartIcon() {
+    return Icon(
+      Icons.list,
+      size: 35,
+      color: Colors.white,
     );
   }
 }
