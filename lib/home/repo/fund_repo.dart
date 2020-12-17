@@ -109,6 +109,10 @@ class FundWallet {
           backgroundColor: Colors.green,
         ),
       );
+
+      await Hive.box('cartData').clear();
+      Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       print('error');
     }

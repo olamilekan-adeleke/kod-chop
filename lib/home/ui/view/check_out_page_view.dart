@@ -294,10 +294,6 @@ class CheckOutPaymentUi extends StatelessWidget {
         price: amount,
       );
 
-      await addressBox.clear();
-      await Hive.box('cartData').clear();
-      Navigator.pop(context);
-      Navigator.pop(context);
     } else {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Select Address')));
