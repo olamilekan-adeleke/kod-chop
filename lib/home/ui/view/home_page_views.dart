@@ -10,6 +10,7 @@ import 'package:kod_chop/auth/methods/auth_methods.dart';
 import 'package:kod_chop/auth/model/user_model.dart';
 import 'package:kod_chop/constant.dart';
 import 'package:kod_chop/home/bloc/food_item/food_item_bloc.dart';
+import 'package:kod_chop/home/bloc/search/search_food_bloc.dart';
 import 'package:kod_chop/home/model/food_model.dart';
 import 'package:kod_chop/home/ui/pages/cart_page.dart';
 import 'package:kod_chop/home/ui/pages/orders_page.dart';
@@ -125,7 +126,10 @@ class HomePageSearchBar extends StatelessWidget {
       onTap: () async {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => SearchPage(),
+            builder: (context) => BlocProvider<SearchFoodBloc>(
+              create: (BuildContext context) => SearchFoodBloc(),
+              child: SearchPage(),
+            ),
           ),
         );
       },
@@ -302,7 +306,6 @@ class HomePageFoodItemView extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => SelectedFoodPage(
               foodItem: foodItem,
-              cartBox: cartBox,
             ),
           ),
         ),
@@ -374,7 +377,7 @@ class HomeCartIcon extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => CartPage(cartBox: cartBox)),
+          MaterialPageRoute(builder: (context) => CartPage()),
         );
       },
       child: Container(

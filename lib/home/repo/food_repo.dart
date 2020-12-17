@@ -3,16 +3,16 @@ import 'package:kod_chop/home/model/food_model.dart';
 import 'package:kod_chop/local_db/hive_methods.dart';
 
 class FoodRepo {
-  CollectionReference foodRef =
+  CollectionReference _foodRef =
       FirebaseFirestore.instance.collection('foodItems');
-  CollectionReference orderRef =
+  CollectionReference _orderRef =
       FirebaseFirestore.instance.collection('orders');
 
   Future<List<FoodItemModel>> getFood(FoodTypeEnum foodType) async {
     List<FoodItemModel> foodList = [];
 
     try {
-      Query query = foodRef.orderBy('foodName');
+      Query query = _foodRef.orderBy('foodName');
 
       if (foodType == FoodTypeEnum.All) {
         // pass
@@ -39,9 +39,29 @@ class FoodRepo {
 
   Stream<QuerySnapshot> orderStream() async* {
     String userUid = await HiveMethods().getUserUid();
-    yield* orderRef
+    yield* _orderRef
         .where('userId', isEqualTo: userUid)
         .orderBy('timestamp')
         .snapshots();
+  }
+
+  Future getFoodByKeyword(String keyword) async {
+    List<FoodItemModel> _foodList = [];
+
+    try {
+      QuerySnapshot querySnapshot =
+          await _foodRef.where('searchKeys', arrayContains: keyword).get();
+
+      _foodList = querySnapshot.docs.map((e) {
+        Map data = e.data();
+        return FoodItemModel.fromMap(data.cast());
+      }).toList();
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e.message);
+    }
+
+    return _foodList;
   }
 }

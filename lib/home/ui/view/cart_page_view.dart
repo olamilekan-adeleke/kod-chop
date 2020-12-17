@@ -8,9 +8,10 @@ import 'package:kod_chop/home/ui/pages/check_out_page.dart';
 
 class CartPageOrders extends StatelessWidget {
   final Size size;
-  final Box cartBox;
 
-  const CartPageOrders({Key key, this.size, this.cartBox}) : super(key: key);
+  CartPageOrders({Key key, this.size}) : super(key: key);
+
+  final Box cartBox = Hive.box('cartData');
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class CartPageOrders extends StatelessWidget {
   }
 
   Widget orderList() {
+
     return ValueListenableBuilder<Box>(
       valueListenable: cartBox.listenable(),
       builder: (_, Box value, child) {
@@ -224,9 +226,9 @@ class CartPageOrders extends StatelessWidget {
 
 class CartTotalAmountUi extends StatelessWidget {
   final Size size;
-  final Box cartBox;
 
-  const CartTotalAmountUi({Key key, this.size, this.cartBox}) : super(key: key);
+  CartTotalAmountUi({Key key, this.size}) : super(key: key);
+  final Box cartBox = Hive.box('cartData');
 
   int getTotal(Box data) {
     int _total = 0;

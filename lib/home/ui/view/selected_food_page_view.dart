@@ -67,9 +67,8 @@ class SelectedFoodImage extends StatelessWidget {
 class SelectedFoodDetails extends StatelessWidget {
   final Size size;
   final FoodItemModel foodItem;
-  final Box cartBox;
 
-  SelectedFoodDetails({Key key, this.size, this.foodItem, this.cartBox})
+  SelectedFoodDetails({Key key, this.size, this.foodItem})
       : super(key: key);
   final ValueNotifier<int> priceValue = ValueNotifier<int>(0);
   final ValueNotifier<int> numberOfPlateValue = ValueNotifier<int>(1);
@@ -116,6 +115,8 @@ class SelectedFoodDetails extends StatelessWidget {
   Widget button(BuildContext context) {
     return InkWell(
       onTap: () async {
+        Box cartBox = Hive.box('cartData');
+
         CartFoodItemModel cartItem = CartFoodItemModel(
           foodName: foodItem.foodName,
           price: foodItem.price,

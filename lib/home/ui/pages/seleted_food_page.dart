@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:kod_chop/home/model/food_model.dart';
 import 'package:kod_chop/home/ui/view/selected_food_page_view.dart';
 
 class SelectedFoodPage extends StatelessWidget {
   final FoodItemModel foodItem;
-  final Box cartBox;
 
-  const SelectedFoodPage({Key key, @required this.foodItem, this.cartBox})
+  const SelectedFoodPage({Key key, @required this.foodItem})
       : super(key: key);
 
   @override
@@ -32,7 +30,6 @@ class SelectedFoodPage extends StatelessWidget {
           child: SelectedFoodDetails(
             size: size,
             foodItem: foodItem,
-            cartBox: cartBox,
           ),
         ),
       ],
